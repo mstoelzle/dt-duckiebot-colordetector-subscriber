@@ -1,0 +1,11 @@
+<package>
+    <name>colordetector_suscriber</name>
+    <version>0.1.0</version>
+    <description>
+        color-detector suscriber
+    </description>
+    <maintainer email="maximilian@stoelzle.ch">Maximilian Stölzle</maintainer>
+    <license>None</license>
+
+    <buildtool_depend>catkin</buildtool_depend>
+</package>
