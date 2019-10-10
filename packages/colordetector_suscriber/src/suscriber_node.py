@@ -5,6 +5,7 @@ import rospy
 from duckietown import DTROS
 from std_msgs.msg import String
 from opencv import cv2
+from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
 
 class SuscriberNode(DTROS):
@@ -15,12 +16,19 @@ class SuscriberNode(DTROS):
         # construct publisher
         self.sub = rospy.Subscriber("MaxiColorDetector", String, self.callback)
 
+        self.bridge = CvBridge()
+
         self.color = 'red'
 
     def callback(self, data):
         rospy.loginfo("I received a message")
-        debug_img = self.color_detection(data, self.color)
-        
+        try:
+            img = self.bridge.imgmsg_to_cv2(data, "bgr8")
+        except CvBridgeError as e:
+            print(e)
+
+        debug_img = self.color_detection(img, self.color)
+
 
     def color_detection(self, img, color):
         # converting from BGR to HSV color space
