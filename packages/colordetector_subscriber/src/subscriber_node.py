@@ -2,25 +2,34 @@
 
 import os
 import rospy
+import rosbag
 from duckietown import DTROS
 from std_msgs.msg import String
-from opencv import cv2
+import cv2
 from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
 
-class SuscriberNode(DTROS):
+class SubscriberNode(DTROS):
 
     def __init__(self, node_name):
         # initialize the DTROS parent class
         super(SuscriberNode, self).__init__(node_name=node_name)
+
+        self.topic
+
         # construct publisher
-        self.sub = rospy.Subscriber("MaxiColorDetector", String, self.callback)
+        self.sub = rospy.Subscriber(self.topic, String, self.callback)
 
         self.bridge = CvBridge()
 
         self.color = 'red'
 
+        self.bag_filename = self.topic+'_debug'
+
     def callback(self, data):
+
+        bag = rosbag.Bag('/data/'+self.filename+'.bag','w')
+
         rospy.loginfo("I received a message")
         try:
             img = self.bridge.imgmsg_to_cv2(data, "bgr8")
@@ -28,6 +37,15 @@ class SuscriberNode(DTROS):
             print(e)
 
         debug_img = self.color_detection(img, self.color)
+
+        try:
+            debug_msg = self.bridge.cv2_to_compressed_imgmsg(debug_img, "jpg")
+        except CvBridgeError as e:
+            print(e)
+
+            #new_msg.header = msg.header
+
+        self.bag.write(self.topic, new_msg, t)
 
 
     def color_detection(self, img, color):
@@ -71,6 +89,6 @@ class SuscriberNode(DTROS):
 
 if __name__ == '__main__':
     # create the node
-    node = SuscriberNode(node_name='suscriber_node')
+    node = SubscriberNode(node_name='subscriber_node')
     # keep spinning
     rospy.spin()

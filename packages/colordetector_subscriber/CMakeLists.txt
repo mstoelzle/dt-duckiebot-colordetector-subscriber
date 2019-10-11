@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(colordetector_suscriber)
+project(colordetector_subscriber)
 
 find_package(catkin REQUIRED COMPONENTS
   rospy
