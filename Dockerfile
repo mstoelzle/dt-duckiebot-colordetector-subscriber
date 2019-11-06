@@ -49,4 +49,4 @@ CMD ["bash", "-c", "${LAUNCHFILE}"]
 # <==================================================
 
 # maintainer
-LABEL maintainer="<YOUR_FULL_NAME> (<YOUR_EMAIL_ADDRESS>)"
+LABEL maintainer="Maximilian Stoelzle (maximilian@stoelzle.ch)"
