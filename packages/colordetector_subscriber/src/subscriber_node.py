@@ -4,7 +4,7 @@ import os
 import rospy
 import rosbag
 from duckietown import DTROS
-from std_msgs.msg import String
+from sensor_msgs.msg import CompressedImage
 import cv2
 from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
@@ -13,40 +13,30 @@ class SubscriberNode(DTROS):
 
     def __init__(self, node_name):
         # initialize the DTROS parent class
-        super(SuscriberNode, self).__init__(node_name=node_name)
+        super(SubscriberNode, self).__init__(node_name=node_name)
 
-        self.topic
+        self.vehicle_name = rospy.get_param("/vehicle_name")
+        self.color = rospy.get_param("/color")
 
-        # construct publisher
-        self.sub = rospy.Subscriber(self.topic, String, self.callback)
+        # construct subscriber
+        self.topic = '/' + self.vehicle_name + '/colordetector_publisher_node/image/compressed'
+        self.sub = rospy.Subscriber(self.topic, CompressedImage, self.callback)
 
         self.bridge = CvBridge()
 
-        self.color = 'red'
-
         self.bag_filename = self.topic+'_debug'
+        self.bag = rosbag.Bag('/data/'+self.bag_filename+'.bag','w')
 
     def callback(self, data):
-
-        bag = rosbag.Bag('/data/'+self.filename+'.bag','w')
-
-        rospy.loginfo("I received a message")
         try:
+            print("Received image message")
+            rospy.loginfo("I received a message")
             img = self.bridge.imgmsg_to_cv2(data, "bgr8")
-        except CvBridgeError as e:
-            print(e)
-
-        debug_img = self.color_detection(img, self.color)
-
-        try:
+            debug_img = self.color_detection(img, self.color)
             debug_msg = self.bridge.cv2_to_compressed_imgmsg(debug_img, "jpg")
-        except CvBridgeError as e:
+            self.bag.write(self.topic, debug_msg)
+        except Exception as e:
             print(e)
-
-            #new_msg.header = msg.header
-
-        self.bag.write(self.topic, new_msg, t)
-
 
     def color_detection(self, img, color):
         # converting from BGR to HSV color space
