@@ -4,4 +4,4 @@ set -e
 
 # YOUR CODE BELOW THIS LINE
 # ----------------------------------------------------------------------------
-rosrun colordetector_subscriber subscriber_node.py
+roslaunch colordetector_subscriber colordetector_subscriber.launch vehicle_name:=$VEHICLE_NAME color:=$COLOR
