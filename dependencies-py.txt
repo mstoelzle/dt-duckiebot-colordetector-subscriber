@@ -1,3 +1,2 @@
 # LIST YOUR PYTHON PACKAGES HERE
 opencv-python
-cv_bridge
