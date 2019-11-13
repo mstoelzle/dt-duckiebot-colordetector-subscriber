@@ -1,43 +1,26 @@
-# Template: template-ros
+# RH3 - Color detector subscriber
 
-This template provides a boilerplate repository
-for developing ROS-based software in Duckietown.
+## Build
+`dts devel build -f --arch amd64`
 
-**NOTE:** If you want to develop software that does not use
-ROS, check out [this template](https://github.com/duckietown/template-basic).
+## Find IPs
+### Laptop IP
+`ifconfig`
 
+### Duckiebot IP
+`ping maxicar.local`
 
-## How to use it
+## Run:
+`docker run -it --rm  --net host -e VEHICLE_NAME=maxicar -e ROS_MASTER_URI=http://MY_ROBOT_IP:11311/ -e ROS_IP=MY_IP -v /Users/maximilianstoelzle/Documents/ethz/AMoD/data:/data duckietown/dt-duckiebot-colordetector-subscriber:v1-amd64`
 
-### 1. Fork this repository
+## Utils
 
-Use the fork button in the top-right corner of the github page to fork this template repository.
+### Access ROS-enabled container
+`docker run -it --rm --net host -e VEHICLE_NAME=maxicar -e ROS_MASTER_URI=http://MY_ROBOT_IP:11311/ -e ROS_IP=MY_IP duckietown/dt-ros-commons:daffy-amd64 /bin/bash`
 
+`rostopic list`
 
-### 2. Create a new repository
+### Show GUI
+`dts start_gui_tools maxicar --base_image duckietown/dt-core:daffy-amd64`
 
-Create a new repository on github.com while
-specifying the newly forked template repository as
-a template for your new repository.
-
-
-### 3. Define dependencies
-
-List the dependencies in the files `dependencies-apt.txt` and
-`dependencies-py.txt` (apt packages and pip packages respectively).
-
-
-### 4. Place your code
-
-Place your ROS packages in the directory `/packages` of
-your new repository.
-
-**NOTE:** Do not use absolute paths in your code,
-the code you place under `/packages` will be copied to
-a different location later.
-
-
-### 5. Setup the launchfile
-
-Change the file `launch.sh` in your repository to
-launch your code.
+`rqt_image_view`

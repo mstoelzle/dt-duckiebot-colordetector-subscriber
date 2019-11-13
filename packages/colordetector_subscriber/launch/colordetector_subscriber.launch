@@ -2,10 +2,10 @@
     <arg name="vehicle_name" default="maxicar" doc="name of the (remote) duckiebot"/>
     <param name="vehicle_name" type="str" value="$(arg vehicle_name)" />
     <group ns="$(arg vehicle_name)">
-        <node pkg="colordetector_subscriber" type="subscriber_node.py" name="colordetector_subscriber_red" output="screen" args="">
+        <node pkg="colordetector_subscriber" type="subscriber_node.py" name="colordetector_subscriber_red" output="screen" args="color">
             <param name="color" type="str" value="red" />
         </node>
-        <node pkg="colordetector_subscriber" type="subscriber_node.py" name="colordetector_subscriber_yellow" output="screen" args="">
+        <node pkg="colordetector_subscriber" type="subscriber_node.py" name="colordetector_subscriber_yellow" output="screen" args="color">
             <param name="color" type="str" value="yellow" />
         </node>
     </group>
